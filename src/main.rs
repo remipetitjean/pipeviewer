@@ -1,5 +1,4 @@
 use pipeviewer::{args::Args, read, stats, write};
-
 use std::io::Result;
 
 fn main() -> Result<()> {
