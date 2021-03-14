@@ -76,7 +76,7 @@ mod tests {
     #[rstest(
         input,
         expected,
-        case(5_u64, "0:00:06"),
+        case(5_u64, "0:00:05"),
         case(60_u64, "0:01:00"),
         case(154_u64, "0:02:34"),
         case(3603_u64, "1:00:03")
