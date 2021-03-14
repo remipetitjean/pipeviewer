@@ -1,8 +1,6 @@
-#![allow(clippy::mutex_atomic)]
-
 use pipeviewer::{args::Args, read, stats, write};
 use std::io::Result;
-use std::sync::{Arc, Mutex};
+use std::sync::mpsc;
 use std::thread;
 
 fn main() -> Result<()> {
@@ -14,12 +12,12 @@ fn main() -> Result<()> {
         silent,
     } = args;
 
-    let quit = Arc::new(Mutex::new(false));
-    let (read_quit, stats_quit, write_quit) = (quit.clone(), quit.clone(), quit);
+    let (stats_tx, stats_rx) = mpsc::channel();
+    let (write_tx, write_rx) = mpsc::channel();
 
-    let read_handle = thread::spawn(move || read::read_loop(&infile, read_quit));
-    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_quit));
-    let write_handle = thread::spawn(move || write::write_loop(&outfile, write_quit));
+    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx));
+    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx, write_tx));
+    let write_handle = thread::spawn(move || write::write_loop(&outfile, write_rx));
 
     // crash if any threads have crashed
     // `.join()` returns a `thread::Result<io::Result<()>>`
