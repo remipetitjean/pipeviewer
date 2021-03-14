@@ -10,3 +10,6 @@ edition = "2018"
 clap = "^2.33"
 crossbeam = "^0.8"
 crossterm = "^0.19"
+
+[dev-dependencies]
+rstest = "^0.6"

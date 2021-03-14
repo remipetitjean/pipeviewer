@@ -67,3 +67,21 @@ impl TimeOutput for u64 {
         format!("{}:{:02}:{:02}", hours, minutes, seconds)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::TimeOutput;
+    use rstest::*;
+
+    #[rstest(
+        input,
+        expected,
+        case(5_u64, "0:00:05"),
+        case(60_u64, "0:01:00"),
+        case(154_u64, "0:02:34"),
+        case(3603_u64, "1:00:03")
+    )]
+    fn as_time_format(input: u64, expected: &str) {
+        assert_eq!(input.as_time().as_str(), expected);
+    }
+}
