@@ -1,3 +1,8 @@
+//! This module contains the stats loop
+//!
+//! # Some header
+//! New section
+
 mod timer;
 
 use crossbeam::channel::Receiver;
@@ -56,14 +61,43 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
     let _ = stderr.flush();
 }
 
+/// The TimeOutput traid adds a `.as_time()` method
+/// It is implemented for u64.
+///
+/// # Example
+/// Example of how to use it:
+///
+/// ```rust
+/// use pipeviewer::stats::TimeOutput;
+/// assert_eq!(65_u64.as_time(), String::from("0:01:05"))
+/// ```
 trait TimeOutput {
     fn as_time(&self) -> String;
 }
 
 impl TimeOutput for u64 {
+    /// Renders the u64 into a time string
     fn as_time(&self) -> String {
         let (hours, left) = (*self / 3600, *self % 3600);
         let (minutes, seconds) = (left / 60, left % 60);
         format!("{}:{:02}:{:02}", hours, minutes, seconds)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::TimeOutput;
+    use rstest::*;
+
+    #[rstest(
+        input,
+        expected,
+        case(5_u64, "0:00:05"),
+        case(60_u64, "0:01:00"),
+        case(154_u64, "0:02:34"),
+        case(3603_u64, "1:00:03")
+    )]
+    fn as_time_format(input: u64, expected: &str) {
+        assert_eq!(input.as_time().as_str(), expected);
     }
 }
