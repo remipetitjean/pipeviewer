@@ -3,6 +3,13 @@ name = "pipeviewer"
 version = "0.1.0"
 authors = ["remi <remi.petitjean@gmail.com>"]
 edition = "2018"
+description = "Rust version of the pv utility"
+homepage = "https://github.com/remipetitjean/pipeviewer"
+repository = "https://github.com/remipetitjean/pipeviewer"
+readme = "README.md"
+keywords = ["pipeviewer"]
+categories = ["command-line-utilities"]
+licence = "MIT OR Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
